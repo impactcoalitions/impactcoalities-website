@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impact Coalities &mdash; het boek</title>
+<meta name="description" content="Promotiesite voor het boek Impact Coalities van Martijn Pater &amp; Lieke Schneijdenberg, met de Apollo-case uitgelicht.">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Layout: the page reads like a book — a bold cover (hero),
+   a title-page quote, editorial chapters in cream, a dark
+   two-page "case spread" for Apollo, and a closing cover band
+   that bookends the hero. Thin hairline diagrams (pyramid,
+   matrix, curve) echo the book's own print figures.
+   Deliberate single (light) theme: colors are lifted directly
+   from the actual printed cover, so the page always matches
+   the physical book — this is a fixed identity, not a default.
+
+   Color   --lime (cover accent) --ink (body/headline ink)
+           --cream (page) --paper (white) --night (dark spread)
+           --lime-dim (muted accent on dark)
+   Type    --display: Anton (cover-style headlines)
+           --serif: Lora (body copy, quotes, captions)
+   ============================================================ */
+:root{
+  --lime:#9ADE00;
+  --lime-dim:#C9F04D;
+  --ink:#14081f;
+  --cream:#F8F6EF;
+  --paper:#FFFFFF;
+  --night:#120a1a;
+  --night-line:#3a2e49;
+  --display:'Anton', Impact, 'Arial Narrow', sans-serif;
+  --serif:'Lora', Georgia, 'Times New Roman', serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:var(--serif);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+[hidden]{display:none!important;}
+h1,h2,h3{text-wrap:balance; margin:0;}
+a{color:inherit;}
+.wrap{
+  max-width:1120px;
+  margin:0 auto;
+  padding-left:max(20px, env(safe-area-inset-left, 0px));
+  padding-right:max(20px, env(safe-area-inset-right, 0px));
+}
+section{padding-block:clamp(56px,9vw,112px);}
+
+/* ---------- type helpers ---------- */
+.eyebrow{
+  font-family:var(--serif);
+  font-weight:600;
+  font-style:italic;
+  font-size:.95rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  opacity:.68;
+  margin:0 0 14px;
+}
+.h-display{
+  font-family:var(--display);
+  font-weight:400;
+  text-transform:uppercase;
+  line-height:.92;
+  letter-spacing:.005em;
+}
+.lede{
+  font-size:clamp(1.05rem,1.1vw + .8rem,1.3rem);
+  line-height:1.55;
+  max-width:62ch;
+}
+.measure{max-width:65ch;}
+.measure p{margin:0 0 1.1em; line-height:1.7; font-size:1.05rem;}
+.measure p:last-child{margin-bottom:0;}
+
+/* ============================================================
+   HERO — the cover
+   ============================================================ */
+.hero{
+  background:var(--lime);
+  color:#000;
+  padding-block:clamp(48px,7vw,88px) clamp(56px,8vw,96px);
+  position:relative;
+  overflow:hidden;
+}
+.hero .wrap{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:clamp(28px,5vw,64px);
+  align-items:end;
+}
+@media (max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;}
+}
+.hero-eyebrow{
+  font-family:var(--serif);
+  font-weight:700;
+  font-style:italic;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:.95rem;
+  margin:0 0 10px;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(3.1rem,9vw,7rem);
+  line-height:.86;
+  text-transform:uppercase;
+  margin:0;
+}
+.hero .sub{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(1.15rem,1.6vw,1.55rem);
+  line-height:1.4;
+  margin:22px 0 0;
+  max-width:34ch;
+}
+.hero .authors{
+  margin-top:26px;
+  font-size:.95rem;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  font-weight:600;
+}
+.hero-ctas{
+  margin-top:34px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:.98rem;
+  letter-spacing:.02em;
+  padding:14px 26px;
+  border-radius:3px;
+  border:2px solid #000;
+  cursor:pointer;
+  text-decoration:none;
+  background:#000;
+  color:var(--lime);
+  transition:transform .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn.ghost{
+  background:transparent;
+  color:#000;
+}
+.btn.ghost:hover{background:#000; color:var(--lime);}
+.btn.on-dark{border-color:var(--lime); background:var(--lime); color:#000;}
+.btn.on-dark.ghost{background:transparent; color:var(--lime);}
+.btn.on-dark.ghost:hover{background:var(--lime); color:#000;}
+
+/* mini cover card, right column of hero */
+.cover-card{
+  background:#000;
+  border:2px solid #000;
+  padding:28px 22px;
+  color:var(--lime);
+  font-family:var(--display);
+  text-transform:uppercase;
+  line-height:1;
+  position:relative;
+  box-shadow:10px 10px 0 rgba(0,0,0,.18);
+}
+.cover-card .cc-title{font-size:clamp(1.6rem,3.4vw,2.1rem); margin-bottom:10px;}
+.cover-card .cc-sub{
+  font-family:var(--serif);
+  font-style:italic;
+  text-transform:none;
+  font-weight:600;
+  font-size:.82rem;
+  line-height:1.4;
+  letter-spacing:0;
+  color:var(--lime-dim);
+  margin-bottom:18px;
+}
+.cover-card .cc-foot{
+  font-family:var(--serif);
+  font-style:normal;
+  font-weight:600;
+  text-transform:uppercase;
+  font-size:.68rem;
+  letter-spacing:.08em;
+  color:#fff;
+  border-top:1px solid var(--night-line);
+  padding-top:12px;
+}
+
+/* ============================================================
+   QUOTE BAND
+   ============================================================ */
+.quoteband{
+  background:var(--paper);
+  border-bottom:1px solid #e8e3d4;
+  border-top:1px solid #e8e3d4;
+}
+.quoteband .wrap{padding-block:clamp(40px,6vw,64px); text-align:center;}
+.quoteband blockquote{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(1.2rem,2.2vw,1.7rem);
+  line-height:1.5;
+  max-width:46ch;
+  margin:0 auto 14px;
+}
+.quoteband cite{
+  font-style:normal;
+  font-size:.85rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  opacity:.65;
+}
+
+/* ============================================================
+   WHY THIS BOOK
+   ============================================================ */
+.why h2{font-size:clamp(1.9rem,3.6vw,2.7rem); margin-bottom:18px;}
+.why .lede{margin-bottom:8px;}
+
+.coalition-grid{
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:#e2dcc9;
+  border:1px solid #e2dcc9;
+}
+@media (max-width:700px){ .coalition-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:460px){ .coalition-grid{grid-template-columns:1fr;} }
+.coalition-item{
+  background:var(--paper);
+  padding:22px 20px;
+  position:relative;
+}
+.coalition-item .yr{
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  opacity:.55;
+  margin-bottom:8px;
+  display:block;
+}
+.coalition-item .nm{
+  font-family:var(--display);
+  text-transform:uppercase;
+  font-size:1.05rem;
+  margin-bottom:6px;
+}
+.coalition-item .gl{
+  font-style:italic;
+  font-size:.92rem;
+  opacity:.8;
+}
+.coalition-item.is-apollo{
+  background:var(--ink);
+  color:var(--lime-dim);
+}
+.coalition-item.is-apollo .yr{color:var(--lime-dim); opacity:.75;}
+.coalition-item.is-apollo .gl{opacity:.9;}
+
+/* ============================================================
+   THREE PILLARS
+   ============================================================ */
+.pillars{background:var(--paper);}
+.pillars h2{font-size:clamp(1.9rem,3.6vw,2.7rem); margin-bottom:10px;}
+.pillar-grid{
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:clamp(20px,3vw,36px);
+}
+@media (max-width:760px){ .pillar-grid{grid-template-columns:1fr;} }
+.pillar{
+  border-top:3px solid var(--ink);
+  padding-top:18px;
+}
+.pillar .ic{height:64px; margin-bottom:16px;}
+.pillar h3{
+  font-family:var(--display);
+  text-transform:uppercase;
+  font-size:1.35rem;
+  margin-bottom:10px;
+}
+.pillar p{font-size:.98rem; line-height:1.65; margin:0; opacity:.85;}
+
+/* ============================================================
+   APOLLO SPREAD (dark)
+   ============================================================ */
+.apollo{
+  background:var(--night);
+  color:#f3efe4;
+  position:relative;
+}
+.apollo .kicker{
+  font-family:var(--serif);
+  font-weight:700;
+  font-style:italic;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:.9rem;
+  color:var(--lime-dim);
+  margin-bottom:14px;
+}
+.apollo h2{
+  font-family:var(--display);
+  text-transform:uppercase;
+  font-size:clamp(2.4rem,6vw,4.2rem);
+  line-height:.92;
+  margin-bottom:32px;
+  color:#fff;
+}
+.apollo-top{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:clamp(28px,5vw,56px);
+  align-items:start;
+}
+@media (max-width:820px){ .apollo-top{grid-template-columns:1fr;} }
+.apollo blockquote{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(1.25rem,2.4vw,1.75rem);
+  line-height:1.45;
+  margin:0 0 10px;
+  color:#fff;
+}
+.apollo cite{
+  font-style:normal;
+  font-size:.82rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--lime-dim);
+}
+.apollo-illustration{
+  border:1px solid var(--night-line);
+  background:rgba(255,255,255,.02);
+  padding:18px;
+}
+.apollo-illustration svg{display:block; width:100%; height:auto;}
+.apollo .measure{margin-top:36px; color:#e4ddcd;}
+.apollo .measure p{font-size:1.02rem; line-height:1.75;}
+
+.stat-row{
+  margin-top:44px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--night-line);
+  border:1px solid var(--night-line);
+}
+@media (max-width:620px){ .stat-row{grid-template-columns:1fr;} }
+.stat{
+  background:var(--night);
+  padding:22px 20px;
+}
+.stat .num{
+  font-family:var(--display);
+  font-size:clamp(2rem,4vw,2.6rem);
+  color:var(--lime-dim);
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+  margin-bottom:6px;
+}
+.stat .lbl{font-size:.88rem; opacity:.75; line-height:1.4;}
+
+.triad{
+  margin-top:48px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:clamp(18px,3vw,28px);
+}
+@media (max-width:760px){ .triad{grid-template-columns:1fr;} }
+.triad-card{
+  border:1px solid var(--night-line);
+  padding:22px 20px;
+}
+.triad-card .role{
+  font-family:var(--display);
+  text-transform:uppercase;
+  font-size:1.1rem;
+  color:#fff;
+  margin-bottom:10px;
+}
+.triad-card p{font-size:.92rem; line-height:1.6; opacity:.8; margin:0;}
+
+/* ============================================================
+   CLOSING CTA — bookend of the cover
+   ============================================================ */
+.closing{
+  background:var(--lime);
+  color:#000;
+}
+.closing .wrap{
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.closing h2{
+  font-family:var(--display);
+  text-transform:uppercase;
+  font-size:clamp(2rem,4.6vw,3.4rem);
+  line-height:.98;
+  max-width:16ch;
+  margin-bottom:18px;
+}
+.closing p{max-width:52ch; font-size:1.05rem; line-height:1.6; margin:0 0 30px;}
+.closing .hero-ctas{justify-content:center;}
+
+footer{
+  background:#000;
+  color:#cfc9b8;
+  font-size:.85rem;
+}
+footer .wrap{
+  padding-block:28px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 24px;
+  justify-content:space-between;
+  align-items:center;
+}
+footer .fm-left b{color:#fff;}
+footer .fm-note{opacity:.65; font-style:italic;}
+
+/* toast for placeholder buy button */
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:max(22px, env(safe-area-inset-bottom, 0px));
+  transform:translate(-50%,12px);
+  background:#000;
+  color:var(--lime);
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:.92rem;
+  padding:13px 22px;
+  border-radius:4px;
+  border:1px solid var(--lime);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease, transform .2s ease;
+  z-index:50;
+  max-width:min(90vw,420px);
+  text-align:center;
+}
+#toast.show{opacity:1; transform:translate(-50%,0);}
+
+@media (prefers-reduced-motion: reduce){
+  .btn, #toast{transition:none;}
+}
+</style>
+</head>
+<body>
+
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="hero-eyebrow">Het boek</p>
+      <h1 class="h-display">Impact<br>Coalities</h1>
+      <p class="sub">Hoe je met Motivatie, Mandaat &amp; Momentum écht iets verandert.</p>
+      <p class="hero-authors authors">Martijn Pater &amp; Lieke Schneijdenberg</p>
+      <div class="hero-ctas">
+        <button class="btn" id="buyBtnHero" type="button">Koop het boek</button>
+        <a class="btn ghost" href="#waarom">Ontdek waar het over gaat ↓</a>
+      </div>
+    </div>
+    <div class="cover-card" aria-hidden="true">
+      <div class="cc-title">Impact<br>Coalities</div>
+      <div class="cc-sub">Hoe motivatie, mandaat &amp; momentum alles verandert.</div>
+      <div class="cc-foot">Vanduuren Management</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     QUOTE BAND
+============================================================ -->
+<section class="quoteband">
+  <div class="wrap">
+    <blockquote>&ldquo;Er is maar één ding erger dan vechten mét bondgenoten &mdash; en dat is vechten zónder hen.&rdquo;</blockquote>
+    <cite>Winston Churchill</cite>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY THIS BOOK
+============================================================ -->
+<section class="why" id="waarom">
+  <div class="wrap">
+    <p class="eyebrow">Waarom dit boek</p>
+    <h2 class="h-display">De grootste problemen<br>los je niet alleen op.</h2>
+    <p class="lede">De problemen vliegen ons om de oren, en ze worden groter en ingewikkelder dan ooit. Hoe halen we PFAS uit onze systemen? Hoe voeden we tien miljard mensen zonder de aarde uit te putten? Hoe verdelen we welvaart eerlijker?</p>
+    <div class="measure">
+      <p><em>Impact Coalities</em> geeft geen pasklaar antwoord op die vragen. Wel laat het zien hóe je het zou kunnen oplossen: niet alleen, en niet met een masterplan van bovenaf &mdash; maar met een coalitie. Een kleine, diverse groep die motivatie, mandaat en momentum weet te bundelen tot verandering.</p>
+      <p>Dat is niets nieuws. De grootste doorbraken in de geschiedenis zijn allemaal zo tot stand gekomen.</p>
+    </div>
+
+    <div class="coalition-grid">
+      <div class="coalition-item">
+        <span class="yr">1886 &ndash; Nederland</span>
+        <div class="nm">Zuiderzeewerken</div>
+        <div class="gl">Afsluiten van de Zuiderzee.</div>
+      </div>
+      <div class="coalition-item is-apollo" id="apollo-teaser">
+        <span class="yr">1961&ndash;1969 &middot; uitgelicht ↓</span>
+        <div class="nm">Apollo programma</div>
+        <div class="gl">Een man op de maan.</div>
+      </div>
+      <div class="coalition-item">
+        <span class="yr">1987 &ndash; Wereldwijd</span>
+        <div class="nm">Montreal Protocol</div>
+        <div class="gl">Dicht het gat in de ozonlaag.</div>
+      </div>
+      <div class="coalition-item">
+        <span class="yr">1996 &ndash; Industrie</span>
+        <div class="nm">USB-standaard</div>
+        <div class="gl">Eén stekker voor alles.</div>
+      </div>
+      <div class="coalition-item">
+        <span class="yr">2000 &ndash; Wereldwijd</span>
+        <div class="nm">Gavi</div>
+        <div class="gl">Ieder kind gevaccineerd.</div>
+      </div>
+      <div class="coalition-item">
+        <span class="yr">1894 &ndash; Wereldwijd</span>
+        <div class="nm">Olympische Spelen</div>
+        <div class="gl">Een betere wereld door sport.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     THREE PILLARS
+============================================================ -->
+<section class="pillars">
+  <div class="wrap">
+    <p class="eyebrow">De kern van het boek</p>
+    <h2 class="h-display">Motivatie, mandaat<br>&amp; momentum.</h2>
+    <p class="lede">Een coalitie staat of valt met drie randvoorwaarden. Mis je er één, dan mis je de kern &mdash; en dat lees je in het boek terug in canvassen, matrices en tientallen cases.</p>
+
+    <div class="pillar-grid">
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="60,6 110,58 10,58" stroke="#14081f" stroke-width="2.5"/>
+          <line x1="22" y1="58" x2="98" y2="58" stroke="#14081f" stroke-width="1.5"/>
+          <line x1="30" y1="46" x2="90" y2="46" stroke="#14081f" stroke-width="1.5"/>
+          <line x1="38" y1="34" x2="82" y2="34" stroke="#14081f" stroke-width="1.5"/>
+          <line x1="46" y1="22" x2="74" y2="22" stroke="#14081f" stroke-width="1.5"/>
+        </svg>
+        <h3>Motivatie</h3>
+        <p>De gedeelde drijfveer die mensen aan tafel houdt, ook als het ingewikkeld wordt. Vertrouwen is het fundament &mdash; opgebouwd uit eerlijkheid, empathie en betrouwbaarheid.</p>
+      </div>
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="12" y="6" width="96" height="52" stroke="#14081f" stroke-width="2.5"/>
+          <line x1="60" y1="6" x2="60" y2="58" stroke="#14081f" stroke-width="1.5"/>
+          <line x1="12" y1="32" x2="108" y2="32" stroke="#14081f" stroke-width="1.5"/>
+          <rect x="60" y="6" width="48" height="26" fill="#14081f"/>
+        </svg>
+        <h3>Mandaat</h3>
+        <p>Wie heeft echt invloed, en wie heeft de kennis? De mandaatmatrix uit het boek maakt in één oogopslag duidelijk wie je sleutelpartner is &mdash; en wie niet.</p>
+      </div>
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 120 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 54 C 30 54, 34 10, 60 10 S 90 54, 112 54" stroke="#14081f" stroke-width="2.5"/>
+        </svg>
+        <h3>Momentum</h3>
+        <p>Timing, triggers, tijdgeest en tractie. De meeste coalities beginnen klein en onopgemerkt &mdash; tot het moment dat het momentum omslaat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     APOLLO CASE SPREAD
+============================================================ -->
+<section class="apollo" id="apollo">
+  <div class="wrap">
+    <p class="kicker">Case uit het boek &mdash; hoofdstuk IV</p>
+    <h2>Een man<br>op de maan.</h2>
+
+    <div class="apollo-top">
+      <div>
+        <blockquote>&ldquo;Land a man on the Moon and return him safely to Earth before the end of the decade.&rdquo;</blockquote>
+        <cite>John F. Kennedy &middot; 25 mei 1961</cite>
+
+        <div class="measure">
+          <p>Apollo begon in 1961 niet als coalitie, maar als top-down contract tussen NASA en zeven partijen, waaronder MIT en Boeing. Drie werelden botsten frontaal: de ambachtelijke testcultuur van NASA, de cost-plus-contractcultuur van de defensie-industrie en de wetenschappelijke experimenteercultuur van MIT. Het resultaat: vertragingen, kwaliteitsgebreken, en in 1967 het fatale drama van Apollo 1, waarbij de bemanning omkwam bij een mislukte test.</p>
+          <p>Dat werd het keerpunt. NASA dwong een radicaal nieuw model af &mdash; systems engineering en all-up testing &mdash; met gezamenlijke Configuration Control Boards waarin ingenieurs van industrie, wetenschap en overheid zij-aan-zij werkten, met dagelijkse besluitvormingscycli in plaats van formele contracten langs elkaar heen. Op het hoogtepunt werkten 400.000 mensen aan het programma. Het model dat daaruit ontstond, geldt nu als een vroege blauwdruk voor agile werken.</p>
+          <p>Op 21 juli 1969 zette Neil Armstrong zijn voet op de maan. Precies op tijd voor Kennedy&rsquo;s deadline: vóór het einde van het decennium.</p>
+        </div>
+      </div>
+
+      <div class="apollo-illustration" role="img" aria-label="Illustratie van de vluchtbaan van de aarde naar de maan, 1961 tot 1969">
+        <svg viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="210" r="150" fill="none" stroke="#3a2e49" stroke-width="1" stroke-dasharray="2 6"/>
+          <circle cx="70" cy="330" r="34" fill="none" stroke="#f3efe4" stroke-width="2"/>
+          <circle cx="70" cy="330" r="34" fill="#120a1a"/>
+          <path d="M44 322 Q70 300 96 322" stroke="#f3efe4" stroke-width="1.4" fill="none"/>
+          <path d="M40 336 Q70 352 100 336" stroke="#f3efe4" stroke-width="1.4" fill="none"/>
+          <circle cx="318" cy="96" r="22" fill="none" stroke="#C9F04D" stroke-width="2"/>
+          <circle cx="325" cy="90" r="19" fill="#120a1a" stroke="none"/>
+          <path d="M96 318 C 170 250, 230 160, 300 108" stroke="#C9F04D" stroke-width="2" fill="none" stroke-dasharray="5 7"/>
+          <g transform="translate(272,128) rotate(-40)">
+            <path d="M0 26 L7 0 L14 26 L7 20 Z" fill="#f3efe4"/>
+            <path d="M0 26 L-6 34 L7 30 L7 20 Z" fill="#C9F04D"/>
+            <path d="M14 26 L20 34 L7 30 L7 20 Z" fill="#C9F04D"/>
+          </g>
+          <text x="40" y="380" font-family="Lora, serif" font-size="13" fill="#cfc9b8" letter-spacing="1">1961</text>
+          <text x="330" y="70" font-family="Lora, serif" font-size="13" fill="#cfc9b8" letter-spacing="1">1969</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="num">400.000</div>
+        <div class="lbl">mensen werkten op het hoogtepunt aan het Apollo-programma</div>
+      </div>
+      <div class="stat">
+        <div class="num">90%</div>
+        <div class="lbl">van het totale budget ging via contracten naar private bedrijven</div>
+      </div>
+      <div class="stat">
+        <div class="num">8 jaar</div>
+        <div class="lbl">van Kennedy&rsquo;s toespraak tot de maanlanding op 21 juli 1969</div>
+      </div>
+    </div>
+
+    <div class="triad">
+      <div class="triad-card">
+        <div class="role">NASA</div>
+        <p>Bewaakte systeemeisen, architectuur, standaarden en missiecontrole &mdash; en nam de eindverantwoordelijkheid. Regisseur, geen bouwer.</p>
+      </div>
+      <div class="triad-card">
+        <div class="role">Industrie</div>
+        <p>Boeing, North American Aviation, Grumman en anderen ontwierpen en bouwden de hardware. Meer dan 90% van het budget vloeide hierheen.</p>
+      </div>
+      <div class="triad-card">
+        <div class="role">Wetenschap</div>
+        <p>Het MIT Instrumentation Lab ontwikkelde de autonome navigatie en boordcomputers &mdash; pionierswerk dat de industrie nog niet in huis had.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CLOSING CTA
+============================================================ -->
+<section class="closing">
+  <div class="wrap">
+    <h2 class="h-display">Wil jij weten hoe je zelf een impact coalitie bouwt?</h2>
+    <p><em>Impact Coalities</em> van Martijn Pater &amp; Lieke Schneijdenberg laat precies zien hoe &mdash; met het coalitie-canvas, de mandaatmatrix en tientallen cases zoals Apollo, de Zuiderzeewerken en de USB-standaard.</p>
+    <div class="hero-ctas">
+      <button class="btn" id="buyBtnClosing" type="button">Koop het boek</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fm-left"><b>Impact Coalities</b> &middot; Martijn Pater &amp; Lieke Schneijdenberg &middot; Vanduuren Management</div>
+    <div class="fm-note">Bestellink volgt zodra het boek verkrijgbaar is.</div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite">Binnenkort beschikbaar &mdash; kom nog even terug!</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
+
+<script>
+(function(){
+  var toast = document.getElementById('toast');
+  var timer = null;
+  function showToast(){
+    toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+  }
+  ['buyBtnHero','buyBtnClosing'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){ el.addEventListener('click', showToast); }
+  });
+})();
+</script>
+
+</body>
+</html>
